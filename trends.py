@@ -1,32 +1,19 @@
 import json
-import requests
-from datetime import datetime
-from xml.etree import ElementTree as ET
+from pytrends_modern import TrendsRSS
 
-URL = "https://news.google.com/rss?hl=pt-BR&gl=BR&ceid=BR:pt-419"
+rss = TrendsRSS()
 
-headers = {
-    "User-Agent": "Mozilla/5.0"
-}
+trends = rss.get_trends(geo="BR")
 
-response = requests.get(URL, headers=headers)
+resultado = []
 
-root = ET.fromstring(response.content)
-
-items = root.findall(".//item")[:10]
-
-trends = []
-
-for item in items:
-    title = item.find("title").text
-
-    trends.append({
-        "trend": title,
-        "resumo": "Notícia em destaque no Google News no Brasil hoje.",
-        "data": datetime.now().strftime("%Y-%m-%d %H:%M")
+for trend in trends[:20]:
+    resultado.append({
+        "trend": trend["title"],
+        "volume": f'{trend["traffic"]}+ buscas'
     })
 
 with open("trends.json", "w", encoding="utf-8") as f:
-    json.dump(trends, f, ensure_ascii=False, indent=2)
+    json.dump(resultado, f, ensure_ascii=False, indent=2)
 
 print("trends.json gerado com sucesso!")
