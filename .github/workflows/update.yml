@@ -22,7 +22,9 @@ jobs:
           python-version: 3.11
 
       - name: Install dependencies
-        run: pip install requests pytrends-modern
+        run: |
+          pip install requests
+          pip install pytrends-modern
 
       - name: Run script
         run: python trends.py
