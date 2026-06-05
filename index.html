@@ -28,9 +28,10 @@
       color: #fbbf24;
     }
 
-    .time {
-      font-size: 12px;
-      opacity: 0.7;
+    .volume {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 5px;
     }
   </style>
 </head>
@@ -44,7 +45,7 @@
 <script>
 async function loadTrends() {
   try {
-    const res = await fetch("trends.json");
+    const res = await fetch("trends.json?v=" + Date.now());
     const data = await res.json();
 
     const container = document.getElementById("container");
@@ -54,8 +55,7 @@ async function loadTrends() {
       container.innerHTML += `
         <div class="card">
           <div class="trend">${item.trend}</div>
-          <p>${item.resumo}</p>
-          <div class="time">${item.data}</div>
+          <div class="volume">${item.volume}</div>
         </div>
       `;
     });
