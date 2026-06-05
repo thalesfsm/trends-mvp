@@ -1,19 +1,23 @@
 import json
-from pytrends_modern import TrendsRSS
+from datetime import datetime
+from pytrends.request import TrendReq
 
-rss = TrendsRSS()
+# Conecta no Google Trends
+pytrends = TrendReq(hl='pt-BR', tz=360)
 
-trends = rss.get_trends(geo="BR")
+# Pega trending searches do Brasil
+df = pytrends.trending_searches(pn='brazil')
 
-resultado = []
+trends_list = []
 
-for trend in trends[:20]:
-    resultado.append({
-        "trend": trend["title"],
-        "volume": f'{trend["traffic"]}+ buscas'
+for item in df[0].tolist():
+    trends_list.append({
+        "trend": item,
+        "volume": "em alta"  # Google Trends não fornece volume exato aqui
     })
 
+# Salva arquivo JSON
 with open("trends.json", "w", encoding="utf-8") as f:
-    json.dump(resultado, f, ensure_ascii=False, indent=2)
+    json.dump(trends_list, f, ensure_ascii=False, indent=2)
 
-print("trends.json gerado com sucesso!")
+print("Trends atualizados com sucesso!")
